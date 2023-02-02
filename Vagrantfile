@@ -20,6 +20,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |configuration|
     end
   end
 
+(3..4).each do |i|
+  configuration.vm.define "dev#{i}" do |app|
+    app.vm.hostname = "dev#{i}"
+    app.vm.box = "centos/7"
+    app.vm.network :private_network, ip: "192.168.60.10#{i}"
+    app.vm.provision "shell", inline: $script_inject_pk
+    end
+  end
+
+
 # Ansible machine
   configuration.vm.define "ansible" do |app|
     app.vm.hostname = "ansible"
@@ -27,4 +37,29 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |configuration|
     app.vm.network :private_network, ip: "192.168.60.110"
     app.vm.provision "file", source: "./id_rsa", destination: "/home/vagrant/.ssh/"
     end
+  
+
+# Jenkins machines
+  configuration.vm.define "jenkins1" do |app|
+    app.vm.hostname = "jenkins1"
+    app.vm.box = "centos/7"
+    app.vm.network :private_network, ip: "192.168.60.121"
+    app.vm.provision "file", source: "./id_rsa", destination: "/home/vagrant/.ssh/"
+    app.vm.provider :virtualbox do |v|
+      v.memory = 8192
+      end
   end
+
+  configuration.vm.define "jenkins2" do |app|
+    app.vm.hostname = "jenkins2"
+    app.vm.box = "ubuntu/focal64"
+    app.vm.network :private_network, ip: "192.168.60.122"
+    app.vm.provision "file", source: "./id_rsa", destination: "/home/vagrant/.ssh/"
+    app.vm.provider :virtualbox do |v|
+      v.memory = 8192
+      end
+    app.vm.provision "file", source: "./id_rsa", destination: "/home/vagrant/.ssh/"
+  end
+
+end
+
