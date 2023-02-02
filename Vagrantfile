@@ -44,7 +44,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |configuration|
     app.vm.hostname = "jenkins1"
     app.vm.box = "centos/7"
     app.vm.network :private_network, ip: "192.168.60.121"
-    app.vm.provision "file", source: "./id_rsa", destination: "/home/vagrant/.ssh/"
+    app.vm.provision "shell", inline: $script_inject_pk
     app.vm.provider :virtualbox do |v|
       v.memory = 8192
       end
@@ -54,11 +54,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |configuration|
     app.vm.hostname = "jenkins2"
     app.vm.box = "ubuntu/focal64"
     app.vm.network :private_network, ip: "192.168.60.122"
-    app.vm.provision "file", source: "./id_rsa", destination: "/home/vagrant/.ssh/"
+    app.vm.provision "shell", inline: $script_inject_pk
     app.vm.provider :virtualbox do |v|
       v.memory = 8192
       end
-    app.vm.provision "file", source: "./id_rsa", destination: "/home/vagrant/.ssh/"
   end
 
 end
