@@ -60,5 +60,46 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |configuration|
       end
   end
 
+# Prod server  
+  configuration.vm.define "Tomcat1" do |app|
+    app.vm.hostname = "Tomcat1"
+    app.vm.box = "centos/7"
+    app.vm.network :private_network, ip: "192.168.60.131"
+    app.vm.provision "shell", inline: $script_inject_pk
+    app.vm.provider :virtualbox do |v|
+      v.memory = 4096
+      end
+  end
+    configuration.vm.define "Tomcat2" do |app|
+    app.vm.hostname = "Tomcat2"
+    app.vm.box = "ubuntu/focal64"
+    app.vm.network :private_network, ip: "192.168.60.132"
+    app.vm.provision "shell", inline: $script_inject_pk
+    app.vm.provider :virtualbox do |v|
+      v.memory = 4096
+      end
+  end
+
+
+# staging server
+  configuration.vm.define "Dock1" do |app|
+    app.vm.hostname = "Dock1"
+    app.vm.box = "centos/7"
+    app.vm.network :private_network, ip: "192.168.60.141"
+    app.vm.provision "shell", inline: $script_inject_pk
+    app.vm.provider :virtualbox do |v|
+      v.memory = 4096
+      end
+  end
+    configuration.vm.define "Dock2" do |app|
+    app.vm.hostname = "Dock2"
+    app.vm.box = "ubuntu/focal64"
+    app.vm.network :private_network, ip: "192.168.60.142"
+    app.vm.provision "shell", inline: $script_inject_pk
+    app.vm.provider :virtualbox do |v|
+      v.memory = 4096
+      end
+  end
+
 end
 
